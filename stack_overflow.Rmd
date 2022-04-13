@@ -1,0 +1,328 @@
+---
+title: "Individual responses on the 2018 Developer Survey fielded by Stack Overflow" 
+author: "Jacinto Mendoza"
+date: "`r Sys.Date()`"
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+    toc_depth: 6
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+suppressPackageStartupMessages(library(tidyverse, quietly = TRUE))
+suppressPackageStartupMessages(library(tidyr, quietly = TRUE))
+untidy_public <- read.csv("survey_results_public.csv")
+source("render_toc.R")
+```
+
+```{r toc, echo=FALSE}
+render_toc("stack_overflow.rmd")
+```
+
+# Data Dictionary
+
+Data Source:  https://www.kaggle.com/stackoverflow/stack-overflow-2018-developer-survey?select=survey_results_public.csv
+
+| Variable           | Description                                            |Data Type
+| -----------        | ---------------------------                            |---------
+| respondent         | Randomized respondent ID number (not in order of survey response time)   | int
+| hobby              | Do you code as a hobby?                                  | logical
+| opensource         | Do you contribute to open source projects?              | logical
+| country            | In which country do you currently reside?              | char
+| student            | Are you currently enrolled in a formal, degree-granting college or university program?| char
+| employment         | Which of the following best describes your current employment status?  | char
+| formaleducation    | Which of the following best describes the highest level of formal education that you've completed?| char
+| undergradmajor     | You previously indicated that you went to a college or university. Which of the following best describes your main field of study (aka 'major') | char
+| companysize        | Approximately how many people are employed by the company or organization you work for? | char
+| devtype            | Which of the following describe you? Please select all that apply. | char
+| yearscoding        | Including any education, for how many years have you been coding? | int
+| yearscodingprof    | For how many years have you coded professionally (as a part of your work)? | int
+| jobsatisfaction    | How satisfied are you with your current job? If you work more than one job, please answer regarding the one you spend the most hours on. | char
+| careersatisfaction | Overall, how satisfied are you with your career thus far? | char
+| hopefiveyears      | Which of the following best describes what you hope to be doing in five years? | char
+| jobsearchstatus    | Which of the following best describes your current job-seeking status? | char
+| lastnewjob         | When was the last time that you took a job with a new employer? | int
+| assessjob1         | Imagine that you are assessing a potential job opportunity. Please rank the following aspects of the job opportunity in order of importance (by dragging the choices up and down), where 1 is the most important and 10 is the least important. The industry that I'd be working in | int
+| assessjob2         | Imagine that you are assessing a potential job opportunity. Please rank the following aspects of the job opportunity in order of importance (by dragging the choices up and down), where 1 is the most important and 10 is the least important. The financial performance or funding status of the company or organization | int
+| assessjob3         | Imagine that you are assessing a potential job opportunity. Please rank the following aspects of the job opportunity in order of importance (by dragging the choices up and down), where 1 is the most important and 10 is the least important. The specific department or team I'd be working on | int
+| assessjob4         | Imagine that you are assessing a potential job opportunity. Please rank the following aspects of the job opportunity in order of importance (by dragging the choices up and down), where 1 is the most important and 10 is the least important. The languages, frameworks, and other technologies I'd be working with | int
+| assessjob5         | Imagine that you are assessing a potential job opportunity. Please rank the following aspects of the job opportunity in order of importance (by dragging the choices up and down), where 1 is the most important and 10 is the least important. The compensation and benefits offered | int
+| assessjob6         | Imagine that you are assessing a potential job opportunity. Please rank the following aspects of the job opportunity in order of importance (by dragging the choices up and down), where 1 is the most important and 10 is the least important. The office environment or company culture  | int
+| assessjob7         | Imagine that you are assessing a potential job opportunity. Please rank the following aspects of the job opportunity in order of importance (by dragging the choices up and down), where 1 is the most important and 10 is the least important. The opportunity to work from home/remotely | int
+| assessjob8         | Imagine that you are assessing a potential job opportunity. Please rank the following aspects of the job opportunity in order of importance (by dragging the choices up and down), where 1 is the most important and 10 is the least important. Opportunities for professional development | int
+| assessjob9         | Imagine that you are assessing a potential job opportunity. Please rank the following aspects of the job opportunity in order of importance (by dragging the choices up and down), where 1 is the most important and 10 is the least important. The diversity of the company or organization | int
+| assessjob10        | Imagine that you are assessing a potential job opportunity. Please rank the following aspects of the job opportunity in order of importance (by dragging the choices up and down), where 1 is the most important and 10 is the least important. How widely used or impactful the product or service I'd be working on is | int
+| assessbenefits1    | Now, imagine you are assessing a job's benefits package. Please rank the following aspects of a job's benefits package from most to least important to you (by dragging the choices up and down), where 1 is most important and 11 is least important. Salary and/or bonuses  | int
+| assessbenefits2    | Now, imagine you are assessing a job's benefits package. Please rank the following aspects of a job's benefits package from most to least important to you (by dragging the choices up and down), where 1 is most important and 11 is least important. Stock options or shares  | int
+| assessbenefits3    | Now, imagine you are assessing a job's benefits package. Please rank the following aspects of a job's benefits package from most to least important to you (by dragging the choices up and down), where 1 is most important and 11 is least important. Health insurance | int
+| assessbenefits4    | Now, imagine you are assessing a job's benefits package. Please rank the following aspects of a job's benefits package from most to least important to you (by dragging the choices up and down), where 1 is most important and 11 is least important. Parental leave | int
+| assessbenefits5    | Now, imagine you are assessing a job's benefits package. Please rank the following aspects of a job's benefits package from most to least important to you (by dragging the choices up and down), where 1 is most important and 11 is least important. Fitness or wellness benefit (ex. gym membership, nutritionist) | int
+| AssessBenefits6    | Assessing a job's benefits package                     | int
+| AssessBenefits7    | Assessing a job's benefits package                     | int
+| AssessBenefits8    | Assessing a job's benefits package                     | int
+| AssessBenefits9    | Assessing a job's benefits package                     | int
+| AssessBenefits10   | Assessing a job's benefits package                     | int
+| AssessBenefits11   | Assessing a job's benefits package                     | int
+| JobContactPriorities1 | Ranking preference of being contacted for jobs      | int
+| JobContactPriorities2 | Ranking preference of being contacted for jobs      | int
+| JobContactPriorities3 | Ranking preference of being contacted for jobs      | int
+| JobContactPriorities4 | Ranking preference of being contacted for jobs      | int
+| JobContactPriorities5 | Ranking preference of being contacted for jobs      | int
+| JobEmailPriorities1 | Ranking items by how important it is to include them in the message | int
+| JobEmailPriorities2 | Ranking items by how important it is to include them in the message | int
+| JobEmailPriorities3 | Ranking items by how important it is to include them in the message | int
+| JobEmailPriorities4 | Ranking items by how important it is to include them in the message | int
+| JobEmailPriorities5 | Ranking items by how important it is to include them in the message | int
+| JobEmailPriorities6 | Ranking items by how important it is to include them in the message | int
+| JobEmailPriorities7 | Ranking items by how important it is to include them in the message | int
+| UpdateCV | Think back to the last time you updated your resume, CV, or an online profile on a job site. What is the main reason that you did so? | char
+| Currency | Which currency do you use day-to-day? | char
+| Salary | What is your current gross salary (before taxes and deductions)? | char
+| SalaryType | Is that salary weekly, monthly, or yearly? | char
+| ConvertedSalary | Salary converted to annual USD, assuming 12 working months and 50 working weeks. | int
+| CurrencySymbol | Three digit currency abbreviation. | char
+| CommunicationTools | Which of the following tools do you use to communicate, coordinate, or share knowledge with your coworkers? | char
+| TimeFullyProductive | How long would you expect it to take before fully productive and contributing? | char
+| EducationTypes | Which of the following types of non-degree education have you used or participated in? | char
+| SelfTaughtTypes | You indicated that you had taught yourself a programming technology without taking a course. What resources did you use to do that? | char
+| TimeAfterBootcamp | How long did it take you to get a full-time job as a developer after graduating? | char
+| HackathonReasons | You indicated previously that you had participated in an online coding competition or hackathon.  Which of the following best describe your reasons for doing so? | char
+| language_desire_next_year   | Programming language desired to work with in the next year   | char
+| database_worked_with        | Databases worked with in the past year                     | char
+| database_desire_next_year   | Databases desired to work with in the next year              | char
+| platform_worked_with        | Platforms worked with in the past year              | char
+| platform_desire_next_year   | Platforms desired to work with in the next year | char
+| framework_worked_with       | Frameworks used in the last year  | char
+| framework_desire_next_year  | Frameworks desired to use in the next year | char
+| IDE                         | Integrated development environments used | char
+| operating_system            | Primary operating system | char
+| number_monitors             | Number of monitors used | char
+| methodology                 | Experience in which methodology | char
+| version_control             | Which version control used | char
+| check_in_code               | How often code is checked in | char
+| adblocker                   | Use an adblocker | logical
+| adblocker_disable           | Disabled ad blocker in the previous month | logical
+| adblocker_reasons           | Reasons for disabling ad blocker in previous month | char
+| ads_agree_disagree_1        | Online advertising can be valuable when it is relevant to me | logical
+| ads_agree_disagree_2        | I enjoy seeing online updates from companies that I follow | logical
+| ads_agree_disagree_3        | I fundamentally dislike the concept of advertising 
+| ads_actions                 | Choice of actions towards ads in the previous month | char
+| ads_priorities_1            | The advertisement is relevant to me | int
+| ads_priorities_2            | The advertisement is honest about its goals | int
+| ads_priorities_3            | The advertisement provides useful information | int
+| ads_priorities_4            | The advertisement seems trustworthy | int
+| ads_priorities_5            | The advertisement is from a company that I like | int
+| ads_priorities_6            | The advertisement offers something of value | int
+| ads_priorities_7            | The advertisement avoids fluffy or vague language | int
+| ai_dangerous                | What do you think is the most dangerous aspect of increasingly advanced AI technology? | char
+| ai_interesting              | What do you think is the most exciting aspect of increasingly advanced AI technology? | char
+| ai_responsible              | Whose responsibility is it, <u>primarily</u>, to consider the ramifications of increasingly advanced AI technology? | char
+| ai_future                   | Overall, what's your take on the future of artificial intelligence? | char
+| ethics_choice               | Imagine that you were asked to write code for a purpose or product that you consider extremely unethical. Do you write the code anyway? | logical
+| ethics_report               | Do you report or otherwise call out the unethical code in question? | char
+| ethics_responsible             | Who do you believe is ultimately most responsible for code that accomplishes something unethical?        | char
+| ethical_implications           | Do you believe that you have an obligation to consider the ethical implications of the code that you write?       | logical
+| stackoverflow_recommend        | How likely is it that you would recommend Stack Overflow overall to a friend or colleague? Where 0 is not likely at all and 10 is very likely.       | int
+| stackoverflow_visit            | How frequently would you say you visit Stack Overflow?       | char
+| stackOverflow_has_account      | Do you have a Stack Overflow account?        | logical
+| stackOverflow__participate     | How frequently would you say you participate in Q&A on Stack Overflow? By participate we mean ask, answer, vote for, or comment on questions.         | char
+| stackOverflow_jobs             | Have you ever used or visited Stack Overflow Jobs?       | logical
+| stackOverflow_devStory         | Do you have an up-to-date Developer Story on Stack Overflow?         | logical
+| stackOverflow_jobs_recommend   | How likely is it that you would recommend Stack Overflow Jobs to a friend or colleague? Where 0 is not likely at all and 10 is very likely.     | int
+| stackOverflow_consider_member  | Do you consider yourself a member of the Stack Overflow community?         | logical
+| hypothetical_tools1            | Please rate your interest in participating in each of the following hypothetical tools on Stack Overflow, where 1 is not at all interested and 5 is extremely interested. A peer mentoring system         | char
+| hypothetical_tools2            | Please rate your interest in participating in each of the following hypothetical tools on Stack Overflow, where 1 is not at all interested and 5 is extremely interested. A private area for people new to programming       | char
+| hypothetical_tools3            | Please rate your interest in participating in each of the following hypothetical tools on Stack Overflow, where 1 is not at all interested and 5 is extremely interested. A programming-oriented blog platform    | char
+| hypothetical_tools4            | Please rate your interest in participating in each of the following hypothetical tools on Stack Overflow, where 1 is not at all interested and 5 is extremely interested. An employer or job review system    | char
+| hypothetical_tools5            | Please rate your interest in participating in each of the following hypothetical tools on Stack Overflow, where 1 is not at all interested and 5 is extremely interested. An area for Q&A related to career growth    | char
+| wake_time                      | On days when you work, what time do you typically wake up?  | char
+| hours_computer                 | On a typical day, how much time do you spend on a desktop or laptop computer?    | char
+| hours_outside                  | On a typical day, how much time do you spend outside?        | char
+| skip_meals                     |  In a typical week, how many times do you skip a meal in order to be more productive?    | char
+| ergonomic_devices              | What ergonomic furniture or devices do you use on a regular basis? Please select all that apply.        | char
+| exercise                       | In a typical week, how many times do you exercise?         | char
+| gender                         |  Which of the following do you currently identify as? Please select all that apply. If you prefer not to answer, you may leave this question blank.        | logical
+| sexual_orientation             | Which of the following do you currently identify as? Please select all that apply. If you prefer not to answer, you may leave this question blank.        | char
+| education_parents              | What is the highest level of education received by either of your parents? If you prefer not to answer, you may leave this question blank.     | char
+| race_ethnicity                 | Which of the following do you identify as? Please check all that apply. If you prefer not to answer, you may leave this question blank.        | char
+| age                            | What is your age? If you prefer not to answer, you may leave this question blank.    | char
+| dependents                     |  Do you have any children or other dependents that you care for? If you prefer not to answer, you may leave this question blank.    | logical
+| military_US                    | Are you currently serving or have you ever served in the U.S. Military?        | logical
+| survey_too_long                | How do you feel about the length of the survey that you just completed?        | char
+| survey_easy                    |  How easy or difficult was this survey to complete?                            | char
+
+
+
+# Reduce num of rows
+
+```{r}
+reduced_public <- subset(untidy_public, select = c(1:17, 120:129, 55))
+#df_1
+```
+
+
+# Rename column name using snake case
+```{r}
+renamed_public <- reduced_public %>% rename(respondent="Respondent", hobby="Hobby", open_source="OpenSource", 
+                                 country="Country", student="Student", employment="Employment",
+                                 formal_education="FormalEducation", undergrad_major="UndergradMajor",
+                                 company_size="CompanySize", dev_type="DevType", years_coding="YearsCoding",
+                                 years_coding_prof="YearsCodingProf", job_satisfaction="JobSatisfaction",
+                                 career_satisfaction="CareerSatisfaction", hope_five_years="HopeFiveYears",
+                                 job_search_status="JobSearchStatus", last_new_job="LastNewJob", exercise="Exercise",
+                                 gender="Gender", sexual_orientation="SexualOrientation", education_parents="EducationParents",
+                                 race_ethnicity="RaceEthnicity", age="Age", dependents="Dependents", military_US="MilitaryUS",
+                                 survey_too_long="SurveyTooLong", survey_easy="SurveyEasy", converted_salary="ConvertedSalary")
+```
+
+# Check for unique values
+```{r}
+#unique(renamed_public$respondent)
+#unique(renamed_public$hobby)
+#unique(renamed_public$open_source
+#unique(renamed_public$country)
+#unique(renamed_public$student)
+#unique(renamed_public$employment)
+#unique(renamed_public$formal_education)
+#unique(renamed_public$undergrad_major)
+#unique(renamed_public$company_size)
+#unique(renamed_public$dev_type)
+#unique(renamed_public$years_coding)
+#unique(renamed_public$years_coding_prof)
+#unique(renamed_public$job_satisfaction)
+#unique(renamed_public$career_satisfaction)
+#unique(renamed_public$hope_five_years)
+#unique(renamed_public$job_search_status)
+#unique(renamed_public$last_new_job)
+#unique(renamed_public$exercise)
+#unique(renamed_public$gender)
+#unique(renamed_public$sexual_orientation)
+#unique(renamed_public$education_parents)
+#unique(renamed_public$race_ethnicity)
+#unique(renamed_public$age)
+#unique(renamed_public$dependents)
+#unique(renamed_public$military_US)
+#unique(renamed_public$survey_too_long)
+#unique(renamed_public$survey_easy)
+```
+
+# Rewrite Columns
+
+## Step 4.1: Rewrite the column value(Formal_education) into readable values
+```{r}
+renamed_public$formal_education[renamed_public$formal_education == "Bachelorâ€™s degree (BA, BS, B.Eng., etc.)"] <- "Bachelors"
+renamed_public$formal_education[renamed_public$formal_education ==  "Associate degree"] <- "Associates"
+renamed_public$formal_education[renamed_public$formal_education == "Some college/university study without earning a degree" ] <- "Some college/university"
+renamed_public$formal_education[renamed_public$formal_education == "Masterâ€™s degree (MA, MS, M.Eng., MBA, etc.)"] <- "Masters"
+renamed_public$formal_education[renamed_public$formal_education == "Secondary school (e.g. American high school, German Realschule or Gymnasium, etc.)" ] <- "Secondary school"
+renamed_public$formal_education[renamed_public$formal_education == "Professional degree (JD, MD, etc.)"] <- "Professional degree"
+renamed_public$formal_education[renamed_public$formal_education == "Other doctoral degree (Ph.D, Ed.D., etc.)"] <- "Others"
+renamed_public$formal_education[renamed_public$formal_education == "I never completed any formal education"  ] <- "None"
+```
+
+## Step 4.2: Rewrite survey_too_long into readable values
+```{r}
+renamed_public$survey_too_long[renamed_public$survey_too_long == "The survey was an appropriate length"] <- "Appropriate length"
+renamed_public$survey_too_long[renamed_public$survey_too_long == "The survey was too long"] <- "Too long"
+renamed_public$survey_too_long[renamed_public$survey_too_long == "The survey was too short"] <- "Too short"
+```
+
+## Step 4.3: Rewrite education_parents
+```{r}
+renamed_public$education_parents[renamed_public$education_parents == "Bachelor's degree (BA, BS, B.Eng., etc.)"] <- "Bachelors"
+renamed_public$education_parents[renamed_public$education_parents == "Some college/university study without earning a degree" ] <- "Some college/university"
+renamed_public$education_parents[renamed_public$education_parents == "Secondary school (e.g. American high school, German Realschule or Gymnasium, etc.)"] <- "Secondary school"
+renamed_public$education_parents[renamed_public$education_parents == "Master's degree (MA, MS, M.Eng., MBA, etc.)"] <- "Masters"
+renamed_public$education_parents[renamed_public$education_parents == "Professional degree (JD, MD, etc.)"] <- "Professional degree"
+renamed_public$education_parents[renamed_public$education_parents == "Other doctoral degree (Ph.D, Ed.D., etc.)"] <- "Other"
+renamed_public$education_parents[renamed_public$education_parents == "They never completed any formal education"] <- "None"
+
+renamed_public$education_parents[renamed_public$education_parents == "Bachelorâ€™s degree (BA, BS, B.Eng., etc.)"] <- "Bachelors"
+renamed_public$education_parents[renamed_public$education_parents == "Masterâ€™s degree (MA, MS, M.Eng., MBA, etc.)"] <- "Masters"
+
+```
+
+## Step 4.4: Rewrite job_search_status
+```{r}
+#unique(renamed_public$job_search_status)
+renamed_public$job_search_status[renamed_public$job_search_status ==  "Iâ€™m not actively looking, but I am open to new opportunities"] <- "Not actively looking"
+renamed_public$job_search_status[renamed_public$job_search_status ==  "I am actively looking for a job"] <- "Actively looking"
+renamed_public$job_search_status[renamed_public$job_search_status ==  "I am not interested in new job opportunities"] <- "Neither"
+#unique(renamed_public$job_search_status)
+```
+
+## Step 4.5: Rewrite hope_five_years
+```{r}
+renamed_public$hope_five_years[renamed_public$hope_five_years ==  "Working as a founder or co-founder of my own company"] <- "Founder or co-founder"
+renamed_public$hope_five_years[renamed_public$hope_five_years ==  "Working in a different or more specialized technical role than the one I'm in now"] <- "Different or specialized technical role"
+renamed_public$hope_five_years[renamed_public$hope_five_years ==  "Working as an engineering manager or other functional manager"] <- "Engineering or other functional manager"
+renamed_public$hope_five_years[renamed_public$hope_five_years ==  "Working in a career completely unrelated to software development"] <- "Career unrelated to software development"
+renamed_public$hope_five_years[renamed_public$hope_five_years ==  "Working as a product manager or project manager"] <- "Product or project manager"
+```
+
+## Step 4.6: Rewrite survey_easy
+```{r}
+#unique(renamed_public$survey_easy)
+renamed_public$survey_easy[renamed_public$survey_easy == "Neither easy nor difficult"] <- "Neither"
+#unique(renamed_public$survey_easy)
+```
+
+## Step 5: Drop column "militrary_US"
+```{r}
+#Insert code here
+public_cleaned <- select(renamed_public, -military_US)
+#head(public_data)
+```
+
+```{r}
+#public_data
+```
+
+# Example Visualizations
+
+```{r}
+public_cleaned %>% 
+  filter(!is.na(age)) %>%
+  select(age) %>%
+  group_by(age) %>%
+  summarize(Count = n()) %>%
+  arrange(desc(Count)) %>%
+  ungroup() %>%
+
+  ggplot(mapping=aes(x=age, y=Count)) +
+  geom_bar(stat="identity", fill="steelblue") +
+  theme(axis.text.x = element_text(angle=30, vjust=1, hjust=1)) +
+  labs(title = "People by Age (doesn't include NA values)", x = "Age of Account Holder", y = "Quantity")
+```
+
+```{r}
+public_cleaned %>% 
+  select(exercise) %>%
+  group_by(exercise) %>%
+  summarize(Count = n()) %>%
+  arrange(desc(Count)) %>%
+  ungroup() %>%
+  mutate(exercise = reorder(exercise, -Count)) %>%
+
+  ggplot(mapping=aes(x=exercise, y=Count)) +
+  geom_bar(stat="identity", aes(fill=exercise)) +
+  theme(axis.text.x = element_text(angle=40, vjust=1, hjust=1)) +
+  labs(title = "Amount of Exercise", x = "Exercise Type", y = "Count")
+```
+
+# Output Cleaned Data to a .CSV
+
+```{r}
+getwd()
+```
+
+```{r}
+write.csv(public_cleaned,"C:/Users/Josh/Desktop/Projects/R/stack_overflow/cleaned_data.csv", row.names = FALSE)
+```
+
+
+
+
+
+
