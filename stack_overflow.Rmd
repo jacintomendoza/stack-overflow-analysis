@@ -17,7 +17,7 @@ source("render_toc.R")
 ```
 
 ```{r toc, echo=FALSE}
-render_toc("stack_overflow.rmd")
+render_toc("stack_overflow.Rmd")
 ```
 
 # Data Dictionary
@@ -318,7 +318,7 @@ getwd()
 ```
 
 ```{r}
-write.csv(public_cleaned,"C:/Users/Josh/Desktop/Projects/R/stack_overflow/cleaned_data.csv", row.names = FALSE)
+write.csv(public_cleaned,"cleaned_data.csv", row.names = FALSE)
 ```
 
 

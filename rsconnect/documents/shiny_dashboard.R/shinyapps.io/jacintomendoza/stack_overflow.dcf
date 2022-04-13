@@ -1,0 +1,13 @@
+name: stack_overflow
+title: stack_overflow
+username:
+account: jacintomendoza
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6079582
+bundleId: 5792912
+url: https://jacintomendoza.shinyapps.io/stack_overflow/
+when: 1649829835.9803
+lastSyncTime: 1649829835.9803
+asMultiple: FALSE
+asStatic: FALSE

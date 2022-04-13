@@ -12,7 +12,7 @@
 
 <meta name="author" content="Jacinto Mendoza" />
 
-<meta name="date" content="2022-04-12" />
+<meta name="date" content="2022-04-13" />
 
 <title>Individual responses on the 2018 Developer Survey fielded by Stack Overflow</title>
 
@@ -154,7 +154,7 @@ code span.ot { color: #007020; }
 <h1 class="title toc-ignore">Individual responses on the 2018 Developer
 Survey fielded by Stack Overflow</h1>
 <h3 class="author">Jacinto Mendoza</h3>
-<h3 class="date">2022-04-12</h3>
+<h3 class="date">2022-04-13</h3>
 </div>
 </header>
 
@@ -981,7 +981,7 @@ completed?</td>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">job_search_status=</span><span class="st">&quot;JobSearchStatus&quot;</span>, <span class="at">last_new_job=</span><span class="st">&quot;LastNewJob&quot;</span>, <span class="at">exercise=</span><span class="st">&quot;Exercise&quot;</span>,</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">gender=</span><span class="st">&quot;Gender&quot;</span>, <span class="at">sexual_orientation=</span><span class="st">&quot;SexualOrientation&quot;</span>, <span class="at">education_parents=</span><span class="st">&quot;EducationParents&quot;</span>,</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">race_ethnicity=</span><span class="st">&quot;RaceEthnicity&quot;</span>, <span class="at">age=</span><span class="st">&quot;Age&quot;</span>, <span class="at">dependents=</span><span class="st">&quot;Dependents&quot;</span>, <span class="at">military_US=</span><span class="st">&quot;MilitaryUS&quot;</span>,</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">survey_too_long=</span><span class="st">&quot;SurveyTooLong&quot;</span>, <span class="at">survey_easy=</span><span class="st">&quot;SurveyEasy&quot;</span>)</span></code></pre></div>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">survey_too_long=</span><span class="st">&quot;SurveyTooLong&quot;</span>, <span class="at">survey_easy=</span><span class="st">&quot;SurveyEasy&quot;</span>, <span class="at">converted_salary=</span><span class="st">&quot;ConvertedSalary&quot;</span>)</span></code></pre></div>
 </div>
 <div id="check-for-unique-values" class="section level1">
 <h1>Check for unique values</h1>
@@ -1109,7 +1109,7 @@ values</h2>
 <h1>Output Cleaned Data to a .CSV</h1>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code></pre></div>
 <pre><code>## [1] &quot;C:/Users/Josh/Desktop/Projects/R/stack_overflow&quot;</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(public_cleaned,<span class="st">&quot;C:/Users/Josh/Desktop/Projects/R/stack_overflow/cleaned_data.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(public_cleaned,<span class="st">&quot;cleaned_data.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 </div>
     </section>
   </div>
