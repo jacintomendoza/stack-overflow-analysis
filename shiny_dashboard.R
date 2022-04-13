@@ -30,7 +30,7 @@ ui <- dashboardPage(
       menuItem("Gender / Sexual Orientation by Country", tabName="gender_sex_country"),
       menuItem("Analysis on some categories", tabName="gender_edu_age"),
       menuItem("Student Analysis by Country", tabName="student_analysis_country"),
-      menuItem("Countrries Salary by Gender", tabName="salary_gender"),
+      menuItem("Countries Salary by Gender", tabName="salary_gender"),
       menuItem("Salary by Gender Country Comparison", tabName="salary_gender_country_comparison"),
       menuItem("Coding Years vs Satisfaction", tabName="code_year_satisfy"),
       menuItem("Satisfied Long Term Coders", tabName="long_term_coders"),
